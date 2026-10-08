@@ -1,0 +1,20 @@
+# Dependencies and generated files
+node_modules/
+__pycache__/
+*.py[cod]
+coverage/
+*.log
+
+# Local settings and credentials
+.env
+.env.*
+!.env.example
+.DS_Store
+.Rhistory
+.RData
+.vscode/
+.idea/
+
+# Personal artwork / local exports
+*.aster
+/aster-canvas.png

@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Aster Canvas — Creative Studio</title>
+    <link rel="stylesheet" href="src/style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="brand">
+        ✳ <strong>aster<span>canvas</span></strong>
+      </div>
+      <div class="doc">
+        <span id="title">Untitled study</span><small id="dimensions"></small>
+      </div>
+      <div class="actions">
+        <button id="focus" title="专注画布 F" aria-pressed="false">
+          专注模式</button
+        ><button id="open">打开项目</button><button id="save">保存项目</button
+        ><button id="import">导入图片</button
+        ><button id="export" class="light">导出 PNG ↗</button>
+      </div>
+    </header>
+    <main>
+      <nav id="tools">
+        <button data-tool="brush" title="画笔 B" class="active">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M5 19l3-7L18 2l4 4L12 16z M5 19l-2 2m5-9 4 4" /></svg
+          ><small>画笔</small></button
+        ><button data-tool="eraser" title="橡皮 E">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3 14l10-11 8 8-10 11H8z M8 9l8 8M11 22h11" /></svg
+          ><small>橡皮</small></button
+        ><button data-tool="select" title="矩形选区 M">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M8 3H3v5m0 8v5h5m8 0h5v-5m0-8V3h-5" /></svg
+          ><small>选区</small></button
+        ><button data-tool="pan" title="平移 H / 空格拖动">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M12 2v20M2 12h20M8 6l4-4 4 4M8 18l4 4 4-4M6 8l-4 4 4 4M18 8l4 4-4 4"
+            /></svg
+          ><small>移动</small></button
+        ><button data-tool="picker" title="吸管 I">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M15 3l6 6m-8-4 6 6M14 6L4 16l-1 5 5-1L18 10" /></svg
+          ><small>吸管</small>
+        </button>
+        <div class="divider"></div>
+        <input
+          id="color"
+          type="color"
+          value="#f3b9a0"
+          title="画笔颜色"
+        /><button id="undo" title="⌘ Z">↶</button
+        ><button id="redo" title="⌘ ⇧ Z">↷</button
+        ><button id="fullscreen" title="全屏">⛶</button>
+      </nav>
+      <section id="workspace">
+        <div class="canvas-label">
+          <span class="eyebrow">YOUR PERSONAL ATELIER</span>
+          <h1>让灵感，自由生长。</h1>
+          <span>Moonlit garden <b>·</b> Creative study 01</span>
+        </div>
+        <div id="viewport">
+          <canvas id="canvas"></canvas>
+          <div id="selection"></div>
+        </div>
+        <div id="emptyhint"></div>
+        <div class="bottom">
+          <span id="toolhint">画笔 · 拖动绘制</span>
+          <div>
+            <button id="zoomout">−</button><button id="fit">适应</button
+            ><span id="zoomlabel">100%</span><button id="zoomin">+</button>
+          </div>
+        </div>
+      </section>
+      <aside>
+        <div class="tabs">
+          <button data-tab="layers" class="active">图层</button
+          ><button data-tab="adjust">调整</button
+          ><button data-tab="ai">✧ AI 创作</button>
+        </div>
+        <section id="layers" class="panel">
+          <div class="sectiontitle">
+            LAYERS <button id="add">＋ 新建</button>
+          </div>
+          <div id="layerlist"></div>
+          <div id="layerprops">
+            <label>图层名称<input id="layername" maxlength="80" /></label
+            ><label
+              >混合模式<select id="blend">
+                <option value="source-over">正常 · Normal</option>
+                <option value="multiply">正片叠底 · Multiply</option>
+                <option value="screen">滤色 · Screen</option>
+                <option value="overlay">叠加 · Overlay</option>
+                <option value="soft-light">柔光 · Soft light</option>
+                <option value="darken">变暗 · Darken</option>
+                <option value="lighten">变亮 · Lighten</option>
+                <option value="difference">差值 · Difference</option>
+                <option value="color">颜色 · Color</option>
+                <option value="luminosity">明度 · Luminosity</option>
+              </select></label
+            ><label
+              >不透明度 <output id="opacityvalue"></output
+              ><input id="opacity" type="range" min="0" max="100"
+            /></label>
+            <div class="row">
+              <button id="up">上移 ↑</button><button id="down">下移 ↓</button
+              ><button id="duplicate">复制</button
+              ><button id="delete">删除</button>
+            </div>
+            <details class="inspector-group">
+              <summary>变换图层 <span>TRANSFORM</span></summary>
+              <div class="fieldgrid">
+                <label
+                  >缩放 %<input
+                    id="transformscale"
+                    type="number"
+                    min="1"
+                    max="400"
+                    value="100" /></label
+                ><label
+                  >旋转 °<input
+                    id="transformrotation"
+                    type="number"
+                    min="-360"
+                    max="360"
+                    value="0" /></label
+                ><label
+                  >水平偏移 px<input
+                    id="transformx"
+                    type="number"
+                    min="-4096"
+                    max="4096"
+                    value="0" /></label
+                ><label
+                  >垂直偏移 px<input
+                    id="transformy"
+                    type="number"
+                    min="-4096"
+                    max="4096"
+                    value="0"
+                /></label>
+              </div>
+              <div class="row">
+                <button id="flipx">水平翻转</button
+                ><button id="flipy">垂直翻转</button>
+              </div>
+              <button id="applytransform" class="wide">应用变换</button>
+              <p>
+                变换将重采样像素、应用蒙版，并将 AI 层转为像素层。可撤销恢复。
+              </p>
+            </details>
+            <div class="subheading">选区与蒙版</div>
+            <p>用矩形选区限定绘制范围，或将选区保存为图层蒙版。</p>
+            <button id="mask">选区 → 蒙版</button
+            ><button id="clearmask">清除蒙版</button
+            ><button id="deselect">取消选区</button>
+          </div>
+        </section>
+        <section id="adjust" class="panel hidden">
+          <div class="sectiontitle">IMAGE ADJUSTMENTS</div>
+          <div id="adjusttarget" class="adjust-target"></div>
+          <p class="panel-intro">雕琢光影，保留每一个原始像素。</p>
+          <div class="histogram-wrap">
+            <canvas
+              id="histogram"
+              width="256"
+              height="64"
+              aria-label="当前图层亮度直方图"
+            ></canvas>
+            <div class="histogram-caption">
+              <span>SHADOWS</span><span>HIGHLIGHTS</span>
+            </div>
+          </div>
+          <div class="row adjust-actions">
+            <button id="compare" title="按住查看当前图层调整前效果">
+              按住对比</button
+            ><button id="resetfilters">重置</button>
+          </div>
+          <div class="looks">
+            <button data-look="soft">柔和</button
+            ><button data-look="film">胶片</button
+            ><button data-look="mono">黑白</button>
+          </div>
+          <div id="filters"></div>
+        </section>
+        <section id="ai" class="panel hidden">
+          <div class="sectiontitle">IMAGINE SOMETHING</div>
+          <div class="badge">
+            ✧ <span id="providerlabel">本地 Demo · 无需 API key</span>
+          </div>
+          <label
+            >创作模式<select id="mode">
+              <option value="pattern">生成图案</option>
+              <option value="replace">局部替换 · 需选区</option>
+              <option value="expand">扩图 · 四周增加 128px</option>
+            </select></label
+          ><label
+            >你的灵感<textarea
+              id="prompt"
+              rows="4"
+              placeholder="描述你想创作的画面…"
+            >
+月光下的植物，柔和的珊瑚色与青绿色</textarea
+            >
+          </label>
+          <div class="row">
+            <label
+              >Seed<input
+                type="number"
+                id="seed"
+                value="42"
+                min="0"
+                max="2147483647" /></label
+            ><button id="randomseed" title="随机 seed">⚄</button>
+          </div>
+          <label
+            >Strength <output id="strengthvalue">75%</output
+            ><input
+              type="range"
+              id="strength"
+              min="10"
+              max="100"
+              value="75" /></label
+          ><button class="primary" id="generate">✧ 生成 AI 图层</button
+          ><button id="regenerate">重新生成当前 AI 图层</button>
+          <p id="aidetail">
+            Demo 根据文字与 seed
+            生成程序化植物图案，用于体验完整编辑流程，不是真实语义图像模型。
+          </p>
+          <details>
+            <summary>连接自定义 Provider</summary>
+            <label
+              >服务端代理 URL<input
+                id="endpoint"
+                placeholder="http://localhost:8787/generate" /></label
+            ><button id="connect">使用代理</button
+            ><button id="demo">切换 Demo</button>
+          </details>
+        </section>
+        <div class="brushsettings">
+          <div class="sectiontitle">BRUSH</div>
+          <label
+            >笔刷大小 <output id="sizevalue">24 px</output
+            ><input
+              type="range"
+              id="size"
+              min="1"
+              max="160"
+              value="24" /></label
+          ><label
+            >笔刷不透明度 <output id="brushopacityvalue">100%</output
+            ><input
+              type="range"
+              id="brushopacity"
+              min="1"
+              max="100"
+              value="100"
+          /></label>
+          <div class="swatches" id="swatches"></div>
+        </div>
+      </aside>
+    </main>
+    <footer>
+      <span><i></i> <span id="status">就绪 · 本地创作</span></span
+      ><span id="historylabel"></span><span>ASTER CANVAS · STUDIO 02</span>
+    </footer>
+    <input type="file" id="imagefile" accept="image/*" hidden /><input
+      type="file"
+      id="projectfile"
+      accept=".aster,application/json"
+      hidden
+    />
+    <script type="module" src="src/app.js"></script>
+  </body>
+</html>
